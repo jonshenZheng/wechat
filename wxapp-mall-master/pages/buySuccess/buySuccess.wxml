@@ -1,0 +1,11 @@
+<!--page/component/buySuccess/buySuccess.wxml-->
+<view class='buySuccese'>
+
+    <icon type='success' size='100'></icon>
+    <view class='tips'>下单成功!</view>
+    <view class='tips'>我们的客服将会在1个工作日内联系您！</view>
+    <view class='tips'>客服热线：<text class='pnum' bindtap='connectUs'>{{phoneNum}}</text></view>
+
+    <view class='moreInfo'><text>更多资讯</text></view>
+    <image src='../../../image/s6.png'></image>
+</view>

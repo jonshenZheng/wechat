@@ -1,0 +1,70 @@
+<view class="main">
+    <swiper indicator-dots="true" autoplay="true" interval="{{interval}}" duration="{{duration}}" circular="true">
+        <block wx:for="{{promotions}}" wx:key="{{index}}">
+            <swiper-item>
+                <image src="{{item.imgUrl}}" class="slide-image" width="100%" data-uri="{{item.uri}}" bindtap='onTapCtrlProtoUri'/>
+            </swiper-item>
+        </block>
+    </swiper>
+    <!-- <navigator url='../register/register'>注册</navigator>
+    <!--<view class="sereachBox">
+        <view class='sereach'>
+            <input  bindinput="bindKeySearchInput" placeholder="" maxlength="24" confirm-type="search"/>
+            <image class='imgSereach' src="../../image/camera.png" bindtap='onTapSearchImageButton'></image>  
+            <button bindtap="search">搜索</button>  
+        </view>
+      
+    </view>-->
+    <!--<view class='layout hotKey'>
+        <text class='til'>热门搜索</text>
+        <view class='hkbox'>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+            <text>大班椅</text>
+
+        </view>
+    
+    </view>-->
+
+    <view class="newest">
+        <view class="newest-title">
+            <text>爆款推荐</text>
+            <text class="morePD" bindtap='intocateg'>更多产品></text>
+        </view>
+        <view class="newest-box">
+
+             
+
+            <view class="newest-list" wx:for="{{recommend}}" wx:for-key="recKey" wx:for-item="recItem">  
+                <navigator url="../details/details?prodId={{recItem.prodId}}&skuId={{recItem.skuId}}">
+                    <image src="{{imgBaseURL+recItem.pic}}"></image>
+                    <view class="newest-text pdName"><text>{{recItem.prodName}}</text></view>
+                    <view class="newest-text"><text class='type'>品类：{{recItem.prodTypeName}}</text></view>
+                </navigator>
+                <!--<view class='line2'></view>-->
+            </view>
+
+            <!--<view class='line'></view>-->
+        </view>
+    </view>
+</view>
+
+<view class='useImgToFind' bindtap='onTapSearchImageButton' >
+    <icon class='fl'></icon>
+    <view class="fr">
+        <view>找不到产品？</view>
+        <text>试试以图搜索产品</text>
+    </view> 
+</view>

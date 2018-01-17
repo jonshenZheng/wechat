@@ -1,0 +1,8 @@
+/* pages/totalsolution/totalsolution.wxss */
+
+.warmTips{
+    margin-top: 30%;
+    text-align: center;
+    font-size: 30rpx;
+    color: #999;
+}

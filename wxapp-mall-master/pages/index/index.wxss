@@ -1,0 +1,209 @@
+@import '../common/common.wxss';
+.layout{padding: 0 20rpx;}
+swiper {
+    height: 421.5rpx;
+}
+swiper-item image {
+    width: 100%;
+    height: 100%;
+}
+
+.newest-title{
+    font-size: 30rpx;
+    padding:30rpx 20rpx 10rpx;
+    height: 40rpx;
+    color: #999;
+    padding-botom: 6rpx;
+    border-bottom: 2rpx solid #ccc; 
+}
+
+.newest-title .morePD{
+    padding-top: 2rpx;
+    float: right;
+    font-size: 26rpx;
+} 
+
+.select-top-small{
+    width: 375rpx;
+    height: 375rpx;
+    float: left;
+}
+.select-bottom,.select-top{
+    width: 100%;
+    height: 375rpx;
+}
+.select-top-small image,.select-bottom image,.select-top-small navigator,.select-bottom navigator{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.newest-box{
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20rpx;
+    display: flex;
+    flex-flow: row wrap;
+}
+.newest-box .newest-list{
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    height: 460rpx;
+    box-sizing: border-box;
+    border-right: 3px solid #eee;
+    border-bottom: 3px solid #eee;
+    padding: 0 16rpx;
+}
+.newest-box .newest-text.pdName{
+    color: #666;
+    padding-bottom: 6rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.newest-box .newest-text{
+    color: #ccc;
+}
+
+.newest-box .newest-text .type{
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.newest-box .newest-list:nth-child(2n){
+    margin-right: 0;
+    border-right: 0;
+}
+
+.newest-box .newest-list image{
+    width: 344rpx;
+    height: 344rpx;
+    margin: 0rpx 0 10rpx;
+}
+.newest-box .newest-list .newest-text{
+    font-size: 28rpx;
+}
+
+.sereachBox{
+    margin: 30rpx 20rpx;
+}
+
+.sereachBox .sereach{
+    height: 92rpx;
+    position: relative;
+    border:2rpx solid #ccc;
+    border-radius: 10rpx;
+}
+
+.sereachBox input{
+    height: 92rpx;
+    line-height: 92rpx;
+    display: block;
+    margin-right: 210rpx;
+    padding-left: 10rpx;
+}
+
+.sereachBox .imgSereach{
+    position: absolute;
+    right: 150rpx;
+    top:50%;
+    margin-top: -32rpx;
+    width: 64rpx;
+    height: 64rpx;    
+}
+
+.sereachBox button{
+    position: absolute;
+    top: -2rpx;
+    right: -2rpx;
+    height: 96rpx;
+    width: 136rpx;
+    border: 0;
+    background-color: #ccc;
+    color:#fff;
+    border-radius: 0;
+    border-top-right-radius: 10rpx;
+    border-bottom-right-radius: 10rpx;
+}
+
+.sereachBox button::after{
+    display: none;
+}
+
+.hotKey .til{
+    display: block;
+    font-size: 30rpx;
+    color: #999;
+    padding-bottom:6rpx;
+    border-bottom: 2rpx solid #ccc;
+}
+
+.hotKey .hkbox{
+    padding-top: 18rpx;
+}
+
+.hotKey .hkbox text{
+    display: inline-block;
+    font-size: 30rpx;
+    color: #999;
+    background-color:#ccc;
+    border-radius:6rpx;
+    margin: 0 14rpx 18rpx 0;
+    padding: 4rpx 18rpx;
+ 
+}
+
+.useImgToFind{
+    position: fixed;
+    bottom:40rpx;
+    right: 40rpx;
+    padding: 8rpx 4rpx 8rpx 20rpx;
+    border-radius: 50rpx;
+    background-color: #199ed8;
+    width: 270rpx;
+}
+
+.useImgToFind .fl{
+    float: left;
+    width:46rpx;
+    height:40rpx;
+    background: url(https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/camera2.png);
+    background-size: 100% 100%;
+    margin-top: 14rpx;
+}
+
+.useImgToFind .fr{
+    float: left;
+    width: 210rpx;
+    font-size: 24rpx;
+    color: #fff;
+    line-height: 36rpx;
+    padding-left: 10rpx; 
+}
+
+
+.newest-box .line{
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 2rpx;
+    height: 100%;
+    background-color: #ccc;
+    margin-left: -2rpx;
+}
+
+.newest-box .line2{
+    position: absolute;
+    left: -50%;
+    bottom: 0;
+    height: 2rpx;
+    background-color: #ccc;
+    width: 500%;
+}
+
+
+
