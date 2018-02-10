@@ -4,6 +4,7 @@
       "pages/register/register",
       "pages/category/category",
       "pages/cart/cart",
+      "pages/cart2/cart2",
       "pages/user/user",
       "pages/address/address",
       "pages/orders/orders",
@@ -18,14 +19,14 @@
   ],
   "window": {
     "navigationBarTextStyle": "#ffffff",
-    "navigationBarTitleText": "十万个有货",
+    "navigationBarTitleText": "",
     "navigationBarBackgroundColor": "#333",
     "backgroundColor": "#333",
     "enablePullDownRefresh": false
   },
   "tabBar": {
-    "color": "#b7b7b7",
-    "selectedColor": "#199ed8",
+    "color": "#333",
+    "selectedColor": "#c91f37",
     "borderStyle": "#f5f5f5",
     "backgroundColor": "#f5f5f5",
     "list": [{

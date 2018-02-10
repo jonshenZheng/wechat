@@ -13,7 +13,12 @@ Page({
         selNum: 0,
         coloData: []
     },
+    onimgfail: function (e) {
+        let arr = this.data.coloData,
+            self = this;
 
+        commJS.loadimgfail(arr, e, 'coloData', 'icon', self);
+    },
     dealwithCollection: function (arr) {
 
         if (!arr.length) {
@@ -43,6 +48,8 @@ Page({
                 let data = r.data.data;
 
                 self.dealwithCollection(data);
+                
+                commJS.checkImgExist(data,'icon');
 
                 self.setData({
                     coloData: data

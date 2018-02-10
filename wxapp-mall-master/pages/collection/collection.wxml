@@ -9,7 +9,7 @@
                     <navigator url="{{'../details/details?prodId='+colItem.produceId}}">
                         <!--<icon class="selBtn {{colItem.isSel}}" data-ind='{{colInd}}' bindtap='selOneFn'></icon>-->
                         <view class='imgwp'>
-                            <image mode="aspectFit" src="{{baseImgUrl+colItem.icon}}"></image>
+                            <image mode="aspectFit" data-imgind="{{colInd}}" binderror='onimgfail' src="{{colItem.icon}}"></image>
                             <view class='status' wx:if="{{colItem.prodStatus}}">
                                 <view class='bg'></view>
                                 <text>{{colItem.prodStatus}}</text>
@@ -18,7 +18,7 @@
                         <view class='right-info'>
                             <text class='gdName textHide'>{{colItem.produceName}}</text>
                             <text class='gdDec'></text>
-                            <text class='gdPrice'>￥{{colItem.price}}</text>
+                            <text class='gdPrice mainColor'>￥{{colItem.price}}</text>
                             <!--<icon class='delBtn' bindtap='delItemFn' data-ind='{{colInd}}'></icon>-->
                         </view>
                     </navigator>

@@ -3,12 +3,40 @@
 let app = getApp(),
     rq = app.bzRequest,
     baseRqUrl = app.globalData.svr,
+    storageKey = 'order',
+    pageStorage,
     commJS = require("../common/common.js");
 
 Page({
   data:{
+    btnff : '',
     orders:[],
     baseImgUrl: app.globalData.baseImgUrl
+  },
+  onLoad :function(o) {
+      pageStorage = commJS.getSorageByPage(storageKey, this);
+  },
+  btnStartFn: function (e) {
+      let n = e.currentTarget.dataset.cname,
+          common = common ? common : commJS;
+
+      common.btnStartFn(this, n);
+  },
+  btnEndFn: function () {
+      let common = common ? common : commJS;
+      common.btnEndFn(this);
+  },
+  onimgfail : function(e){
+      let arr = this.data.orders,
+          oind = e.currentTarget.dataset.oind,
+          ind = e.currentTarget.dataset.imgind;
+
+      if (e.detail.errMsg.indexOf('noPic.png') === -1) {
+          arr[oind].items[ind].icon = '../../image/noPic.png';
+          this.setData({
+              orders: arr
+          })
+      }
   },
   dealwithOrders : function(arr){
 
@@ -19,6 +47,8 @@ Page({
     let i = arr.length,
         taltolMoney,
         temp,
+        itm,
+        itm_i,
         tprice,
         i2;
 
@@ -45,11 +75,29 @@ Page({
         arr[i]['statusDetail']['isShow'] = false;
         arr[i]['statusDetail']['info'] = [];
 
+        //处理图片路径
+        itm = arr[i].items;
+        itm_i = itm.length;
+        if (itm_i < 1){
+            continue;
+        }
+        for (; itm_i--;){
+            if (!itm[itm_i].icon){
+                itm[itm_i].icon = '../../image/noPic.png';
+            }
+            else{
+                itm[itm_i].icon = app.globalData.baseImgUrl + itm[itm_i].icon;
+            }
+        }
+
+
     }
 
 
   },  
+
   onReady() {
+    //let pageStorage = commJS.getSorageByPage(storageKey, this);   
 
     //commJS.isRegister('../orders/orders',0);
     
@@ -60,10 +108,11 @@ Page({
         success : function(r){
 
             self.dealwithOrders(r.data.data);
-        
-            self.setData({
+            commJS.setStorageByPage(storageKey, self, 'orders', pageStorage, r.data.data);
+
+            /*self.setData({
                 orders : r.data.data
-            })
+            })*/
  
         }
     })
@@ -72,9 +121,6 @@ Page({
   
   onShow:function(){
    
-  },
-  onLoad :function(){
-       
   },
   showStatusDetailFn : function(e){
       let ind = e.currentTarget.dataset.ind,

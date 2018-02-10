@@ -1,3 +1,5 @@
+@import '../common/common.wxss';
+
 page{
     background-color: #f0f2f5;
 }
@@ -49,6 +51,11 @@ page{
     width: 50%;
     position: relative;
 }
+
+.colBox .scrollBox .oriWid navigator{
+    margin-right: 86rpx;
+}
+
 .colBox .scrollBox .realdelBtn{
     position: absolute;
     left: 50%;
@@ -143,7 +150,6 @@ page{
 
 .colBox .cloIt .gdPrice{
     font-size: 26rpx;
-    color: #f99;
 }
 
 .colBox .cloIt .gdNum{

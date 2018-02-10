@@ -1,6 +1,6 @@
 <view class="main">
     <view class='imageBox'>
-        <image class="bgimg" src="https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/userHeadBg.png" mode='widthFix'></image>
+        <image class="bgimg" src="../../image/userHeadBg.png" mode='widthFix'></image>
         <view class="headbox flex_cen">
             <view class='userInfoWp'>
                 <image src="{{thumb}}" class="thumb"></image>
@@ -25,10 +25,9 @@
     </view>
 
     <view class='listbox'>
-        <contact-button type="default-light" session-from="weapp" class='list' style="display:block;"> 
-            <view class="icowp" style='margin-left:-36rpx'><icon class='ico3'></icon></view><text>在线客服</text><icon class='tri_rig'></icon>
-        </contact-button>
-        <!--<view class='list'><view class="icowp"><icon class='ico3'></icon></view><text>在线客服</text><icon class='tri_rig'></icon></view>-->
+        <button open-type="contact" session-from="weapp" class='list' style="display:block;"> 
+            <view class="icowp"><icon class='ico3'></icon></view><text>在线客服</text><icon class='tri_rig'></icon>
+        </button>
         <view class='list' bindtap='callkf'><view class="icowp"><icon class='ico4'></icon></view><text>客服热线</text><icon class='tri_rig'></icon></view>
 
     </view>

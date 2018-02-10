@@ -1,7 +1,7 @@
 @import '../common/common.wxss';
 .layout{padding: 0 20rpx;}
 swiper {
-    height: 421.5rpx;
+    /*height: 421.5rpx;*/
 }
 swiper-item image {
     width: 100%;
@@ -161,11 +161,24 @@ swiper-item image {
     position: fixed;
     bottom:40rpx;
     right: 40rpx;
-    padding: 8rpx 4rpx 8rpx 20rpx;
-    border-radius: 50rpx;
-    background-color: #199ed8;
-    width: 270rpx;
+    width: 284rpx;
+    height: 118rpx;
+    line-height: 108rpx;
+    background: url(https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/btn_index_picSearch.png);
+    background-size: 100% 100%;
 }
+
+.useImgToFind.useImgToFindOn{
+    background: url(https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/btn_index_picSearch2.png);
+    background-size: 100% 100%;
+}
+
+.useImgToFind text{
+    font-size: 26rpx;
+    color: #fff;
+    padding-left: 106rpx;
+}
+
 
 .useImgToFind .fl{
     float: left;
@@ -205,5 +218,9 @@ swiper-item image {
     width: 500%;
 }
 
-
+.imgcss{
+    height: 0;
+    width: 100%;
+    background: url(https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/btn_index_picSearch2.png);
+}
 

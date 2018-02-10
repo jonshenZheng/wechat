@@ -1,7 +1,7 @@
 @import '../common/common.wxss';
 
 page{
-    background-color: #fff;
+    background-color: #eee;
     position: relative;
 }
 /*.sereachBox{
@@ -25,7 +25,7 @@ page{
     flex-grow : 1;
     text-align: center;
     font-size: 26rpx;
-    color: #333;
+    color: #999;
     align-self:center;
     height:76rpx;
     line-height:76rpx;
@@ -35,13 +35,29 @@ page{
     border-right: 2rpx solid #ccc;
 }
 
-.sereachBox .tab-lb icon{
+.sereachBox .tab-lb.show{
+    color: #333;
+}
+
+.sereachBox .tab-lb.show icon{
     width: 30rpx;
     height: 16rpx;
     background: url(https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/tri_down.png) no-repeat;
     background-size: 100% 100%;
     margin-left: 6rpx;
 }
+
+.sereachBox .tab-lb icon{
+    width: 16rpx;
+    height: 30rpx;
+    background: url(https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/tri_right_off.png) no-repeat;
+    background-size: 100% 100%;
+    margin-left: 6rpx;
+    vertical-align: middle;
+    margin-top: -8rpx;
+}
+
+
 .sereachBox .selectArea{
     position: relative;
 }
@@ -112,8 +128,6 @@ page{
     width: 128rpx;
     height: 64rpx;
     line-height: 64rpx;
-    background-color: #ccc;
-    color: #999;
     border-radius: 6rpx;
     margin: 0 40rpx;
     display: inline-block;
@@ -122,20 +136,24 @@ page{
     font-size: 32rpx;
 }
 
+.sereachBox .btnBox .cancle{
+    background-color: #ccc;
+    color: #999;
+}
+
 .sereachBox .btnBox .sel-btn::after{
     display: none;
 }
 
-.sereachBox .btnBox .sel-btn.gray{
-    background-color: #199edb;
-    color: #fff;
+.sereachBox .btnBox .sel-btn.button-hover{
+    background-color: #eceaea;
 }
 
 .reserBox{
     position: absolute;
     width: 100%;
     left: 0;
-    top: 80rpx;
+    top: 76rpx;
     bottom: 0;
     /*display: flex;
     display: -webkit-flex;
@@ -144,7 +162,7 @@ page{
 
 .reserBox .ajustbox{
     min-height: 100%;
-    padding: 0 20rpx;
+    /*padding: 0 20rpx;*/
     overflow: hidden;
     /*margin-top: -86rpx;*/    
 }
@@ -153,21 +171,38 @@ page{
     padding: 86rpx 20rpx 0;
 }*/
 
+.realbox{
+    display: block;
+    width: 110%;
+}
 
 .reserBox .pd_it{
-    width: 33.3333%;
+    width: 29.6%;
     flex: 1;
-    padding: 0 20rpx;
+    padding: 20rpx;
     box-sizing: border-box;
     float: left;
-    margin:20rpx 0;
+    background-color: #fff;
+    margin-right:1%;
+    margin-bottom:1%;
 }
+
+.reserBox .pd_it:nth-of-type(3n){
+    margin-right: 0;
+}
+
+
+
+
 
 .reserBox .imgwp{width: 100%}
 
 .reserBox image{
-    width: 220rpx;
-    height: 220rpx;
+    width: 204rpx;
+}
+
+.reserBox .imgwp,.reserBox image{
+    height: 204rpx;
 }
 
 .reserBox .pdname{
@@ -180,7 +215,6 @@ page{
 }
 
 .reserBox .price{
-    color: #f99;
     font-size: 26rpx;
     display: block;
     overflow: hidden;

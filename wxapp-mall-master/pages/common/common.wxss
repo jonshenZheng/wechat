@@ -20,6 +20,10 @@ page{
 }
 
 
+.mainTextColor{
+    color: #c91f37 !important;
+}
+
 /*  加载更多   */
 .weui-loading {
   margin: 0 5px;
@@ -47,8 +51,24 @@ page{
 
 }
 
+/*mainblue类名即将废丢弃*/
 .mainblue{
-    color: #199edb !important;
+    color: #c91f37 !important;
+}
+
+.mainColor{
+    color: #c91f37 !important;
+}
+
+/*有些提不出来 如下单按钮*/
+.mainBgColor{
+    color: #fff !important;
+    background-color: #c91f37 !important;
+}
+
+/*按压效果只有button按钮才能提出了，非button的用的是通个变量，导致安一个钮其他按钮都跟着变色*/
+.mainBgColor.button-hover{
+    background-color: #f32845 !important;
 }
 
 

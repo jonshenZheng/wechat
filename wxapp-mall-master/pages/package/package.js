@@ -1,6 +1,7 @@
 // page/component/sereach/sereach.jslet 
 let app = getApp(),
     rq = app.bzRequest,
+    commJs = require('../common/common.js'),
     baseURL = app.globalData.svr;
 Page({
 
@@ -14,21 +15,31 @@ Page({
         packageName: '',
         goodsList: []
     },
+    onimgfail: function (e) {
+
+        let arr = this.data.goodsList,
+            self = this;
+
+        commJs.loadimgfail(arr, e, 'goodsList', 'path', self);
+
+    },
     onLoad: function (e) {
         console.log(e);
         let that = this;
         rq({
             url: baseURL + 'package/' + e.id,
             success: function (res) {
-                if (res.data.meta.code == 200) {
-                    that.setData({
-                        packageName: res.data.data.groupName,
-                        goodsList: res.data.data.produces
-                    });
-                    wx.setNavigationBarTitle({
-                        title: res.data.data.groupName,
-                    });
-                }
+                
+                commJs.checkImgExist(res.data.data.produces,'path');
+
+                that.setData({
+                    packageName: res.data.data.groupName,
+                    goodsList: res.data.data.produces
+                });
+                wx.setNavigationBarTitle({
+                    title: res.data.data.groupName,
+                });
+                
             }
         });
     },

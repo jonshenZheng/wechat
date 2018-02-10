@@ -2,6 +2,7 @@
 let app = getApp(),
   rq = app.bzRequest,
   baseURL = app.globalData.svr,
+  commJs = require('../common/common.js'),
   pageSize = 15;
 
 Page({
@@ -14,6 +15,16 @@ Page({
         ],
         minPrice : '',
         maxPrice : '',
+        minPrice_befor: '',
+        maxPrice_befor: '',
+
+        length : '',
+        width : '',
+        height: '',
+        length_befor: '',
+        width_befor: '',
+        height_befor: '',
+
         oldSereachForm : {},
         baseImgUrl: getApp().globalData.baseImgUrl,
         goodsList:[],
@@ -23,6 +34,18 @@ Page({
     dealwithGoodsList : function(arr){
         arr['hasMore'] = arr.prodIntros.length < pageSize ? false : true;
         arr['startPage'] = 1;
+    },
+    onimgfail : function(e){
+
+        let arr = this.data.goodsList,
+            ind = e.currentTarget.dataset.imgind;
+
+        if (e.detail.errMsg.indexOf('noPic.png') === -1) {
+            arr.prodIntros[ind].path = '../../image/noPic.png';
+            this.setData({
+                goodsList: arr
+            })
+        }
     },
     sortPrice: function (e) {
         let ind = e.currentTarget.dataset.ind,
@@ -39,7 +62,7 @@ Page({
         }
 
         if (maxP !== '' && minP !== '') {
-            if (minP > maxP) {
+            if (Number(minP) > Number(maxP)) {
                 temp = minP;
                 minP = maxP;
                 maxP = temp;
@@ -59,6 +82,8 @@ Page({
           return
       }
       this.dealwithGoodsList(searchResult);
+    
+      commJs.checkImgExist(searchResult.prodIntros,'path');
       this.setData({
           goodsList: searchResult,
       });
@@ -70,48 +95,90 @@ Page({
       });*/
     },
     formSubmitFn2: function (e) {
-
+        
         let arr = this.data.goodsList,
-            fid = arr.imgUuid;
+            fid = arr.imgUuid,
+            oldForm = this.data.oldSereachForm;
             
         if (e.detail.value.minPriceV || e.detail.value.minPriceV === '0' || e.detail.value.maxPriceV || e.detail.value.maxPriceV === '0') {
-            if ((!e.detail.value.minPriceV && e.detail.value.minPriceV !== '0') && (!e.detail.value.maxPriceV && e.detail.value.maxPriceV !== '0')) {
+            /*if ((!e.detail.value.minPriceV && e.detail.value.minPriceV !== '0') && (!e.detail.value.maxPriceV && e.detail.value.maxPriceV !== '0')) {
                 wx.showModal({
                     content: '搜索内容不能为空',
                     showCancel : false
                 });
                 return;
-            }
+            }*/
 
-            this.getProdData(fid, '', '', '', e.detail.value.minPriceV, e.detail.value.maxPriceV, 1, arr, '');
+            this.setData({
+                minPrice: e.detail.value.minPriceV,
+                maxPrice: e.detail.value.maxPriceV,
+                minPrice_befor: e.detail.value.minPriceV,
+                maxPrice_befor: e.detail.value.maxPriceV,
+            })
+            
+            this.getProdData(fid, oldForm.width, oldForm.depth, oldForm.Heigth, e.detail.value.minPriceV, e.detail.value.maxPriceV, 1, arr, '');
         }
         else {
 
-            if ((!e.detail.value.lengthV && e.detail.value.lengthV !== '0') && (!e.detail.value.widthV && e.detail.value.widthV !== '0') && (!e.detail.value.heightV && e.detail.value.heightV !== '0')) {
+            /*if ((!e.detail.value.lengthV && e.detail.value.lengthV !== '0') && (!e.detail.value.widthV && e.detail.value.widthV !== '0') && (!e.detail.value.heightV && e.detail.value.heightV !== '0')) {
                 wx.showModal({
                     title: '提示',
                     content: '搜索内容不能为空',
                 });
                 return;
-            }
+            }*/
 
-            this.getProdData(fid, e.detail.value.lengthV, e.detail.value.widthV, e.detail.value.heightV, '', '', 1, arr, '')
+            this.setData({
+                length: e.detail.value.lengthV,
+                width: e.detail.value.widthV,
+                height: e.detail.value.heightV,
+                length_befor: e.detail.value.lengthV,
+                width_befor: e.detail.value.widthV,
+                height_befor: e.detail.value.heightV,
+            });
+            
+            this.getProdData(fid, e.detail.value.lengthV, e.detail.value.widthV, e.detail.value.heightV, oldForm.minMoney, oldForm.maxMoney, 1, arr, '')
         }
 
         this.hidepanFn();
 
     },
-    hidepanFn: function () {
-
+    hidepanFn: function (e) {
+        
         let arr = this.data.showpanCt;
         arr[this.data.showpanCtInd].isshow = '';
 
-        this.setData({
-            maxPrice: '',
-            minPrice: '',
-            showpanCtInd: '',
-            showpanCt: arr
-        });
+        if (e) {
+
+            let isPrice = e.currentTarget.dataset.cansle == '1' ? true : false;
+
+            if (isPrice) {
+
+                this.setData({
+                    maxPrice: this.data.maxPrice_befor,
+                    minPrice: this.data.minPrice_befor,
+                    showpanCtInd: '',
+                    showpanCt: arr
+                });
+
+            }
+            else {
+                this.setData({
+                    length: this.data.length_befor,
+                    width: this.data.width_befor,
+                    height: this.data.height_befor,
+                    showpanCtInd: '',
+                    showpanCt: arr
+                });
+            }
+
+        }
+        else{
+            this.setData({
+                showpanCtInd: '',
+                showpanCt: arr
+            });
+        }
 
     },
     showpanFn: function (e) {
@@ -243,5 +310,14 @@ Page({
         })
 
     },
+    /*重置规格*/
+    resetSize: function (e) {
+
+        this.setData({
+            length: '',
+            width : '',
+            height : ''
+        });
+    }
    
 })

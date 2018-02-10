@@ -7,5 +7,5 @@
     <view class='tips'>客服热线：<text class='pnum' bindtap='connectUs'>{{phoneNum}}</text></view>
 
     <view class='moreInfo'><text>更多资讯</text></view>
-    <image src='../../../image/s6.png'></image>
+    <!--<image src=''></image>-->
 </view>

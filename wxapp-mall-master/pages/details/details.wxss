@@ -63,7 +63,6 @@ swiper-item image {
 }
 .goods-info .goods-price{
    box-sizing:border-box;
-   color:#f99;
    font-size: 32rpx;
    font-weight: bold;
    width: 100%;
@@ -128,6 +127,10 @@ swiper-item image {
 
 .goods-text.wid400{
     width: 400rpx !important;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .des-imgs{
@@ -167,9 +170,9 @@ swiper-item image {
   text-align: center;
   padding-top: 26rpx;
   font-size:20rpx;
-  color:#acacb7;
+  color:#999;
   box-sizing: border-box;
-  background:url("https://cdn.it120.cc/images/weappshop/cart.png") no-repeat center 21rpx;
+  background:url("https://baize-webresource.oss-cn-shenzhen.aliyuncs.com/weixin/image/cart.png") no-repeat center 21rpx;
   background-size: 44rpx auto;
 }
 
@@ -178,9 +181,10 @@ swiper-item image {
   width: 250rpx;
   height: 100%;
   line-height: 100rpx;
-  background-color: #ff6850;
-  color:#fff;
   font-size: 34rpx;
+}
+.footer-box .join-shop-cart-on{
+    background-color: #f32845 !important;
 }
 .footer-box .join-shop-cart.add{
     background-color: #bbb;
@@ -191,7 +195,7 @@ swiper-item image {
   width: 250rpx;
   line-height: 100rpx;
   /* background-color: #e64340; */
-  color:#199ed8;
+  color:#333;
   font-size: 34rpx;
   border-left: 2rpx solid #ddd;
 }
@@ -274,7 +278,6 @@ swiper-item image {
 }
 .pop-goods-price{
   font-size:28rpx;
-  color:#f99;
   margin-top:20rpx; 
 }
 .pop-goods-close{
@@ -311,7 +314,10 @@ swiper-item image {
   border: 1px solid #e64340;
 }
 .size-label-box .label-item.disabled{
-  border: 1px dashed #e64340;
+  /* border: 1px dashed #e64340; */
+   border: 1px solid #f7f7f7;
+  color:#ddd;
+  background-color: #f7f7f7;
 }
 .buy-num-box{
    display: flex;
@@ -346,12 +352,16 @@ swiper-item image {
 }
 .popup-join-btn{
   width: 100%;
-  height: 89rpx;
+  height: 100rpx;
   text-align: center;
-  line-height: 89rpx;
+  line-height: 100rpx;
   font-size:34rpx;
   color:#ffffff;
   background-color: #e64340;
+}
+
+.popup-join-btn-on{
+    background-color: #fd504d;
 }
  
 .buy-num-box .num-box .hui{
@@ -363,3 +373,91 @@ swiper-item image {
     overflow-y:auto;
     overflow-x:hidden;
 }
+
+.footer-box .cartNum{
+    position: absolute;
+    right: 20rpx;
+    top: 6rpx;
+    font-size: 24rpx;
+    padding:2rpx 10rpx;
+    border-radius: 50%;
+    color: #fff;
+    background-color: #e73c39;
+    line-height: normal;
+}
+
+.footer-box .showAnimate{
+    position: absolute;
+    right: 8rpx;
+    top: -24rpx;
+    font-weight: bold;
+    font-size: 26rpx;
+    color: #e73c39;
+    line-height: normal;
+    visibility: hidden;
+}
+
+.footer-box .showAnimate.on{
+    animation: showcartNum 1s forwards; 
+    -webkit-animation :showcartNum 1s forwards; 
+}
+
+@-webkit-keyframes showcartNum{
+    0%{
+        visibility: visible;
+        transform: translateY(0);
+        opacity: 1;
+    }
+    80%{
+        transform: translateY(-40rpx);
+        opacity: 9;
+    }
+    100%{
+        transform: translateY(-40rpx);
+        opacity: 0;
+    }
+}
+
+@keyframes showcartNum{
+    0%{
+        visibility: visible;
+        transform: translateY(0);
+        opacity: 1;
+    }
+    80%{
+        transform: translateY(-40rpx);
+        opacity: 9;
+    }
+    100%{
+        transform: translateY(-40rpx);
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+
+.textJusty{
+    text-align: justify;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

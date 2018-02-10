@@ -7,7 +7,13 @@ let app = getApp(),
 
 Page({
   data: {
+    sendkefu: {},
     baseimgURL: app.globalData.baseImgUrl,
+    btnff : '',
+    sendkefuMsg : '',
+    cartNumAnimate : '',
+    addcartNum : '',
+    totalCartNum: 0,    
     tabarData: {
       isCollection: false,
       isAddCart: false
@@ -17,25 +23,17 @@ Page({
     interval: 3000,
     duration: 1000,
     goodsSelection: {
-    },
+    },//核心:选择所依托的数据
     goodsDetail: {
-    },
+    },//核心:当前选中的商品的详情
     collectionId : '',
-    swiperCurrent: 0,
-    hasMoreSelect: true,
-    bHideSelectView: true,
-    purchaseQuantity: 1,
+    swiperCurrent: 0,//目前没用
+    hasMoreSelect: true,//是否能针对当前商品进行更多的属性选择
+    bHideSelectView: true,//是否显示选择的view
+    purchaseQuantity: 1,//用户设置的购买数量,每点一次加入购车,就会放入bHideSelectView个商品
     minPurchaseQuantity: 1,
     maxPurchaseQuantity: 999,
-    propertyValueNames: "",
-  },
-
-  //事件处理函数
-  swiperchange: function (e) {
-    //console.log(e.detail.current)
-    this.setData({
-      swiperCurrent: e.detail.current
-    })
+    selectedPropertyStr: "",//选中的属性对应的字符串,用于界面显示选择中属性文本
   },
 
   onLoad: function (e) {
@@ -46,7 +44,7 @@ Page({
 
     let self = this,
       dataO;
-    
+
     prodID = e.prodId;
     var skuId = e.skuId;
     var url = baseURL + 'produce/detail/' + prodID;
@@ -60,14 +58,26 @@ Page({
 
         let selection = r.data.data.goodsSelection;
         let selected = r.data.data.goodsSelection.selected;
+        
         for (var i = 0; i < selected.properties.length; i++) {
-        selection.properties[i].values[selected.properties[i]].selected = true
+          let idx = selected.properties[i];
+          try {
+            selection.properties[i].values[idx].selected = true
+          } catch (e) {
+            console.error(e)
+          }
         }
+
+        if (!r.data.data.goodsDetail.pics.length){
+            r.data.data.goodsDetail.pics[0] = '';
+        }
+
+        commJS.checkImgExist(r.data.data.goodsDetail.pics);
+        r.data.data.goodsDetail.basicInfo.icon = commJS.checkImgExist(r.data.data.goodsDetail.basicInfo.icon);
+
         self.setData({
-        goodsSelection: r.data.data.goodsSelection,
-        goodsDetail: r.data.data.goodsDetail,
-        //collectionId: r.data.data.mallCollectionId,
-        maxPurchaseQuantity: r.data.data.goodsSelection.selected.count
+          goodsSelection: r.data.data.goodsSelection,
+          goodsDetail: r.data.data.goodsDetail
         });
         self.checkSelection();
 
@@ -76,44 +86,127 @@ Page({
 
     //请求是否收藏
     rq({
-        url: baseURL + 'colletion/getId/' + prodID,
-        withoutToken: false,
-        success : function(r){
+      url: baseURL + 'colletion/getId/' + prodID,
+      withoutToken: false,
+      success: function (r) {
 
-            self.setData({
-                collectionId: r.data.data.mallCollectionId
-            });
-            
-        }
-    })
+        self.setData({
+          collectionId: r.data.data.mallCollectionId
+        });
 
+      }
+    });
 
+    let sendKefuObj = {
+      prodId: prodID,
+      skuId: skuId
+    };
+
+    this.changeProdFn(sendKefuObj);
 
   },
-  limitNum : function(e){
+  onShow: function (e) {
+    // 主动刷新购物车数量
+    this.getCartNUM();
+  },
+  showCartNum : function(num){
+    let self = this;
+    this.setData({
+        cartNumAnimate : 'on',
+        addcartNum: num
+    });
+    setTimeout(function(){
+        self.setData({
+            cartNumAnimate: '',
+            addcartNum: ''
+        });
+    },1000)
+  },
+  btnStartFn: function (e) {
+      let n = e.currentTarget.dataset.cname,
+          common = common ? common : commJS; 
 
-      let val = Number(e.detail.value),
-          min = this.data.minPurchaseQuantity,
-          max = this.data.maxPurchaseQuantity; 
+      common.btnStartFn(this, n);
+  },
+  btnEndFn: function () {
+      let common = common ? common : commJS; 
+      common.btnEndFn(this);
+  },
+  onimgfail: function (e) {
 
-      if (val < min){
-          val = min;
-      }
-      else if (val > max){
-          val = max;
+      let objName = e.currentTarget.dataset.objname,
+          ind = e.currentTarget.dataset.imgind,
+          arr = this.data.goodsDetail;
+
+      switch (objName) {
+          case 'pics':  if (e.detail.errMsg.indexOf('noPic.png') === -1) {
+                            arr.pics[ind] = '../../image/noPic.png';
+                        }
+              break;
+          case 'icon':  if (e.detail.errMsg.indexOf('noPic.png') === -1) {
+                            arr.basicInfo.icon = '../../image/noPic.png';
+                        }
+              break;
       }
 
       this.setData({
-          purchaseQuantity: val
-      })
+          goodsDetail: arr
+      });
 
   },
-  goShopCar: function () {
-    wx.switchTab({
-      url: '../cart/cart'
+
+  //事件处理函数
+  swiperchange: function (e) {
+    //console.log(e.detail.current)
+    this.setData({
+      swiperCurrent: e.detail.current
     })
   },
+  changeProdFn : function(data,cb){
 
+      let dataObj,
+          pid = data.prodId ? data.prodId : this.data.sendkefu.prodId,
+          sid = data.skuId ? data.skuId : this.data.sendkefu.skuId;
+
+        dataObj = {
+            prodId: pid,
+            skuId: sid
+        }
+
+        this.setData({
+            sendkefu: dataObj
+        });
+  },
+  getCartNUM : function(cb){
+      let cbFn = cb || '',
+          self = this;
+      rq({
+          url: baseURL + 'shopcart/count',
+          withoutToken: false,
+          success: function (r) {
+              self.setData({
+                  totalCartNum: r.data.data
+              });
+              if (typeof cbFn == 'function'){
+                  cbFn();
+              }
+          }
+      });
+  },
+  /**
+   * 跳转到购物车页面
+   */
+  goToShopCart: function () {
+    // wx.switchTab({
+    //   url: '../cart/cart'
+    // })
+      wx.navigateTo({
+          url: '../cart2/cart2'
+      })
+  },
+  /**
+   * 添加到购物车
+   */
   addToShopCart: function () {
 
     let that = this;
@@ -132,7 +225,11 @@ Page({
               duration: 1500
             });
             that.hideSelectView();
-          
+            
+            that.getCartNUM(function(){
+                 that.showCartNum(r.data.data);
+            });
+
         }
       })
     } else {
@@ -209,28 +306,35 @@ Page({
       bHideSelectView: true
     })
   },
-
-  descQuantity: function () {
-    if (this.data.purchaseQuantity > this.data.minPurchaseQuantity) {
-      var currentNum = this.data.purchaseQuantity;
-      currentNum--;
-      this.setData({
-        purchaseQuantity: currentNum
-      })
-    }
+  
+  /**
+   * 增加购买数目
+   */
+  onTapIncrOrDecrQuantityBtn: function (e) {
+    let incr = e.currentTarget.dataset.increasement
+    var currentQuantity = this.data.purchaseQuantity;
+    this.changeQuantity(currentQuantity + Number(incr));
   },
+  onInputQuantity: function (e) {
 
-  incrQuantity: function () {
-      
-    if (this.data.purchaseQuantity < this.data.maxPurchaseQuantity) {
-      var currentNum = this.data.purchaseQuantity;
-      var maxNum = this.data.maxPurchaseQuantity; 
+    let val = Number(e.detail.value);
+    this.changeQuantity(val);
+  },
+  changeQuantity: function (val) {
+    let min = this.data.minPurchaseQuantity,
+      max = this.data.maxPurchaseQuantity;
 
-      currentNum++;
-      this.setData({
-        purchaseQuantity: currentNum
-      })
+    if (val < min) {
+      val = min;
     }
+    else if (val > max) {
+      val = max;
+    }
+
+    this.setData({
+      purchaseQuantity: val
+    })
+
   },
 
   /**
@@ -260,14 +364,14 @@ Page({
 
     // 检查当下的选择
     var checkRes = this.checkSelection();
-    let propertyValueNames = checkRes.propertyValueNames;
-    let propertyValueIndexs = checkRes.propertyValueIndexs;
+    let selectedPropertyStr = checkRes.selectedPropertyStr;
+    let selectedPropertyIndexs = checkRes.selectedPropertyIndexs;
 
     // 重新计算disable
     let compositions = this.data.goodsSelection.composition;
     //当第i个属性未确定,其余均取当前选择的结果,那么看第i个属性所有的值有哪些是存在于组合的
-    for (var i = 0; i < propertyValueIndexs.length; i++) {      
-      let tmpCompProp = propertyValueIndexs.slice(0);
+    for (var i = 0; i < selectedPropertyIndexs.length; i++) {      
+      let tmpCompProp = selectedPropertyIndexs.slice(0);
       // 将未选中项替换为对应的正则\\d+
       for (var j = 0; j < tmpCompProp.length; j++){
         if (j != i && tmpCompProp[j] == -1)
@@ -291,10 +395,13 @@ Page({
       }
     }
 
+    let kefuMsg = '产品名：' + this.data.goodsDetail.basicInfo.name + '规格：' + selectedPropertyStr;
+
     // 更新选择
     that.setData({
       goodsSelection: that.data.goodsSelection,
-      propertyValueNames: propertyValueNames,
+      selectedPropertyStr: selectedPropertyStr,
+      sendkefuMsg: kefuMsg
     });
 
     // 更新商品详情
@@ -307,6 +414,11 @@ Page({
         url: url,
         header: { "with-selection": "false" },
         success: function (r) {
+            if (!r.data.data.goodsDetail.pics.length) {
+                r.data.data.goodsDetail.pics[0] = '';
+            }
+            commJS.checkImgExist(r.data.data.goodsDetail.pics);
+            r.data.data.goodsDetail.basicInfo.icon = commJS.checkImgExist(r.data.data.goodsDetail.basicInfo.icon);
             that.setData({
               goodsDetail: r.data.data.goodsDetail,
             });
@@ -315,12 +427,15 @@ Page({
             wx.hideLoading();
         }
       })
+
+      that.changeProdFn({ skuId: skuId});
+
     }
   },
 
   /**
    * 检查当前的选择是否合法
-   * 注意!!!这个方法会更新propertyValueNames
+   * 注意!!!这个方法会更新selectedPropertyStr
    * 返回skuid,空串则非法
    */
   checkSelection: function () {
@@ -328,8 +443,8 @@ Page({
     var properties = this.data.goodsSelection.properties
     var needSelectNum = properties.length;
     var curSelectNum = 0;
-    var propertyValueIndexs = [];
-    var propertyValueNames = "";
+    var selectedPropertyIndexs = [];
+    var selectedPropertyStr = "";
     for (var i = 0; i < properties.length; i++) {
       var childs = properties[i].values;
       var s = false;
@@ -337,34 +452,40 @@ Page({
         if (childs[j].selected) {
           curSelectNum++;
           s = true;
-          propertyValueIndexs.push(j);
-          propertyValueNames = propertyValueNames + properties[i].name + ":" + childs[j].name + "  ";
+          selectedPropertyIndexs.push(j);
+          // selectedPropertyStr = selectedPropertyStr + properties[i].name + ":" + childs[j].name + "  ";
+          selectedPropertyStr = selectedPropertyStr + childs[j].name + "，";
         }
       }
       if (!s)
-        propertyValueIndexs.push(-1);
+        selectedPropertyIndexs.push(-1);
     }
+    if (selectedPropertyStr.endsWith("，"))
+      selectedPropertyStr = selectedPropertyStr.substr(0, selectedPropertyStr.length-1)
 
     var skuId = '';
     if (needSelectNum == curSelectNum) {
       let comp = this.data.goodsSelection.composition;
       for (var i = 0; i < comp.length; i++) {
         let value = comp[i];
-        if (value.properties.toString() == propertyValueIndexs.toString()) {
+        if (value.properties.toString() == selectedPropertyIndexs.toString()) {
           skuId = value.id;
           break;
         }
       };
     }
 
+    let kefuMsg = '产品名：' + this.data.goodsDetail.basicInfo.name + '规格：' + selectedPropertyStr;
+
     this.setData({
-      propertyValueNames: propertyValueNames,
+      selectedPropertyStr: selectedPropertyStr,
+      sendkefuMsg: kefuMsg
     });
 
     return {
       "skuId": skuId,
-      "propertyValueIndexs": propertyValueIndexs,
-      "propertyValueNames": propertyValueNames,
+      "selectedPropertyIndexs": selectedPropertyIndexs,
+      "selectedPropertyStr": selectedPropertyStr,
     };
   },
 
@@ -384,7 +505,14 @@ Page({
       }
     }
   },
-
+  /*图片预览*/
+  prevImg : function(e){
+      var src = e.currentTarget.dataset.src;
+      wx.previewImage({
+          current: src, 
+          urls: this.data.goodsDetail.pics 
+      });
+  },
   getVideoSrc: function (videoId) {
     var that = this;
     wx.request({

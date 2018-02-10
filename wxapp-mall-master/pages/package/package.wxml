@@ -64,10 +64,10 @@
                     <navigator url="{{'../details/details?prodId='+item.prodId}}" class='pd_it'>
                         <view class='it' wx:key="key">
                             <view class='imgwp'>
-                                <image src="{{baseImgUrl+item.path}}"></image>
+                                <image src="{{item.path}}" data-imgind="{{idx}}" binderror='onimgfail'></image>
                             </view>
                             <view class='pdname'>{{item.prodName}}</view>
-                            <text class='price'>￥{{item.price}}</text> 
+                            <text class='price mainColor'>￥{{item.price}}</text> 
                         </view>
                     </navigator>
                 </block>
@@ -86,7 +86,7 @@
 
     </scroll-view>
     <view wx:else>
-        <view class="no-data">很抱歉，没有搜索到相关的产品..</view>
+        <view class="no-data">加载中..</view>
     </view>
 
     

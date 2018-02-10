@@ -3,20 +3,34 @@
 //获取应用实例
 let app = getApp(),
   rq = app.bzRequest,
+  storageKey = 'cart',
+  pageStorage,
   commJS = require("../common/common.js"),
   baseURL = app.globalData.svr;
 
 Page({
   data: {
+    showBindPhone : false,  
     carts: [],               // 购物车列表
     totalPrice: 0,           // 总价，初始为0
     allSelected: false,    // 全选状态
     selNum: 0,             //统计已选家具数量
     baseImgUrl: getApp().globalData.baseImgUrl,
     noSelect: true, //未选中任一商品
+    btnff: '',
   },
   onReady : function(){
-       
+      pageStorage = commJS.getSorageByPage(storageKey, this); 
+  },
+  btnStartFn: function (e) {
+      let n = e.currentTarget.dataset.cname,
+          common = common ? common : commJS;
+
+      common.btnStartFn(this, n);
+  },
+  btnEndFn: function () {
+      let common = common ? common : commJS;
+      common.btnEndFn(this);
   },
   dealwithCarT:function(arr){
     if(!arr.length){
@@ -43,6 +57,12 @@ Page({
     }
 
   },
+  onimgfail : function(e){
+      let arr = this.data.carts,
+          self = this;
+
+      commJS.loadimgfail(arr, e, 'carts', 'imgUrl', self);
+  },
   onShow: function () {
     var that = this
     //this.getTotalPrice();
@@ -51,9 +71,12 @@ Page({
       url: baseURL + 'shopcart',
       withoutToken : false,
       success: function (r) {
+        
         let cartItems = r.data.data;
 
         that.dealwithCarT(cartItems);
+        
+        commJS.checkImgExist(cartItems,'imgUrl');
 
         let carts = that.data.carts;
  
@@ -68,6 +91,7 @@ Page({
         that.setData({
           carts: cartItems,
         });
+        commJS.setStorageByPage(storageKey, that, 'cart', pageStorage, cartItems);
         that.getTotalPrice();
       }
     })
@@ -262,7 +286,7 @@ Page({
    * 下单
    */
   placeOrder:function(){
-
+    
     //commJS.isRegister('../cart/cart', 1,true);
 
     let that = this;
@@ -296,9 +320,13 @@ Page({
       errorcb : function(r){
         if (r.data.meta.code == 800) {
 
-            if (!commJS.isRegister('../cart/cart', 1, true)) {
+            /*if (!commJS.isRegister('../cart/cart', 1, true)) {
                 return;
-            }
+            }*/
+            //改为获取手机号
+            that.setData({
+                showBindPhone: true
+            });
 
         } 
       },
@@ -387,6 +415,68 @@ Page({
       })
 
   },
+  //提示绑定手机号
+  hideBindPhone : function(){
+    this.setData({
+        showBindPhone : false
+    })
+  },
+  //获取绑定手机号
+  getPhoneNum : function(e){
 
+      let self = this;  
+      if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
+        this.hideBindPhone();
+      } else {
+          
+          let data = e.detail.encryptedData,
+              iv = e.detail.iv,
+              self = this,
+              dat = { "iv": iv, "encryptedData": data };
+
+          sendPhoneData();
+
+          function sendPhoneData(){
+              rq({
+                  method: 'put',
+                  data: JSON.stringify(dat),
+                  errorcb : function(){
+                      wx.showModal({
+                          content: '绑定失败，请重试。',
+                          showCancel: false
+                      });
+                  },
+                  //requestAgain: sendPhoneData,
+                  withoutToken: false,
+                  errorcb: function () {
+                      app.login();
+                  },
+                  url: baseURL + 'getUserPhone',
+                  success: function (r) {
+                      wx.setStorageSync(app.globalData.needRegPhoneNumKey, true);
+                      wx.showModal({
+                          content: '绑定成功',
+                          showCancel: false,
+                          success: function (res) {
+                              self.hideBindPhone();
+                              self.placeOrder();
+                          }
+                      });
+
+                  },
+                  fail: function () {
+                      wx.showModal({
+                          content: '绑定失败',
+                          showCancel: false,
+                          success: function (res) {
+                              self.hideBindPhone();
+                          }
+                      });
+                  }
+              });
+          }
+
+      } 
+  },
 
 })

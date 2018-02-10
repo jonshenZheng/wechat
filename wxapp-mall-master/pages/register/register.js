@@ -6,11 +6,12 @@ let app = getApp(),
   backUrlWay;
 Page({
     data:{
-        agreeProtocol : false,
+        agreeProtocol : true,
         disabled: true,
         iSdisabled: 'disabled',
         phoneNum : '',
         codeNum : '',
+        appName : app.globalData.appName,
         getCodeCD : 0,
     },
     onLoad : function(parm){

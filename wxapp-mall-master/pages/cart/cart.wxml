@@ -12,7 +12,7 @@
                         <icon class="selBtn {{colItem.selected}}" data-index='{{colInd}}' bindtap='selectGoodsInCart'></icon>
                             <navigator url="../details/details?skuId={{colItem.skuId}}&prodId={{colItem.produceId}}">
                                 <view class='imgwp'>
-                                    <image mode="widthFix" src="{{baseImgUrl+colItem.imgUrl}}"></image>
+                                    <image mode="widthFix" binderror='onimgfail' data-imgind="{{colInd}}" src="{{colItem.imgUrl}}"></image>
                                     <view class='status' wx:if="{{colItem.prodStatus}}">
                                         <view class='bg'></view>
                                         <text>{{colItem.prodStatus}}</text>
@@ -24,7 +24,7 @@
                                     <text class='gdName textHide'>{{colItem.produceName}}</text>
                                 </navigator>
                                 <text class='gdDec'>{{colItem.property}}</text>
-                                <text class='gdPrice'>￥{{colItem.price}}</text>
+                                <text class='gdPrice mainColor'>￥{{colItem.price}}</text>
                                 
                             </view>
                          
@@ -61,10 +61,20 @@
             <text>全选</text>
         </view>
         <view class="selInfo" hidden="{{noSelect}}">
-            <view class='r1'>总计<text class='cnum1'>{{totalPrice}}</text>元</view>
+            <view class='r1'>总计<text class='cnum1 mainColor'>{{totalPrice}}</text>元</view>
             <view class='r2'>共<text class='cnum2'>{{selNum}}</text>件家具</view>
         </view>
-        <view class="addCartBtn {{noSelect?'':'on'}}" bindtap="placeOrder">下订单</view>
+        <view class="addCartBtn {{(noSelect?'':'on ')+btnff}}" bindtap="placeOrder"  data-cname='addCartBtnOn' bindtouchcancel='btnEndFn' bindtouchstart='btnStartFn' bindtouchend='btnEndFn' >下订单</view>
     </view>
 
+</view>
+<view class='bindPhone' wx:if="{{showBindPhone}}">
+    <view class='bg'></view>
+    <view class='cent'>
+        <view class='til'>需要绑定手机号才能下单</view>
+        <view class="btnbx">
+            <text class='cancle' bindtap='hideBindPhone'>取消</text>
+            <button class='mainBgColor' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNum">绑定</button>
+        </view>
+    </view>
 </view>

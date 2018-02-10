@@ -30,7 +30,8 @@ page{
 }
 
 .imageBox .userInfoWp text{
-    display: block
+    display: block;
+    color: #fff;
 }
 
 .imageBox .userInfoWp image{
@@ -57,6 +58,7 @@ page{
 
 .listbox .list text{
     color: #999;
+    font-size: 34rpx
 }
 
 .listbox .list:first-child{
@@ -130,8 +132,15 @@ page{
     background-size: 100% 100%;
 }
 
+.listbox button{
+    text-align: left;
+    background-color: #fff !important;
+}
 
 
+.listbox button::after{
+    display: none;
+} 
 
 
 
